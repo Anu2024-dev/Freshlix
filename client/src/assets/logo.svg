@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="80" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Leaf Icon -->
+  <g transform="translate(10,10)">
+    <path d="M30 40 C10 25, 15 5, 40 5 C65 5, 65 35, 45 50 Z" fill="#22c55e"/>
+    <path d="M45 40 C35 25, 55 15, 70 25 C75 35, 60 55, 45 50 Z" fill="#16a34a"/>
+    <path d="M5 50 C30 70, 70 70, 95 50" stroke="#16a34a" stroke-width="4" fill="none"/>
+  </g>
+
+  <!-- Sparkles -->
+  <circle cx="90" cy="15" r="3" fill="#22c55e"/>
+  <circle cx="100" cy="25" r="2" fill="#22c55e"/>
+
+  <!-- Text -->
+  <text x="120" y="50" font-family="Arial, sans-serif" font-size="36" font-weight="700">
+    <tspan fill="#22c55e">Fresh</tspan>
+    <tspan fill="#1f2937">lix</tspan>
+  </text>
+
+</svg>
