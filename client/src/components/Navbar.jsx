@@ -4,7 +4,7 @@ import { assets } from '../assets/assets';
 import { useAppContext } from '../context/AppContext';
 const Navbar = () => {
     const [open, setOpen] = React.useState(false);
-    const { user, setUser, showUserLogin, setShowUserLogin, navigate, setSearchQuery, searchQuery } = useAppContext();
+    const { user, setUser, showUserLogin, setShowUserLogin, navigate, setSearchQuery, searchQuery, getCartCount } = useAppContext();
     const logout = async () => {
         setUser(null);
         navigate('/');
@@ -164,11 +164,9 @@ const Navbar = () => {
 
                     <img src={assets.nav_cart_icon} className='w-6 opacity-80 relative z-10 transition group-hover:scale-125' />
 
-                    <span className="absolute -top-2 -right-3 text-xs text-white bg-gradient-to-r from-green-500 to-green-600 w-5 h-5 flex items-center justify-center rounded-full shadow animate-ping"></span>
-
-                    <span className="absolute -top-2 -right-3 text-xs text-white bg-green-600 w-5 h-5 flex items-center justify-center rounded-full">
-                        3
-                    </span>
+                    <button className="absolute -top-2 -right-3 text-xs text-white bg-green-600 w-5 h-5 flex items-center justify-center rounded-full">
+                        {getCartCount()}
+                    </button>
 
                 </div>
                 {!user ? (
@@ -200,12 +198,25 @@ const Navbar = () => {
                     </div>
                 )}
             </div>
-            <button
-                onClick={() => setOpen(!open)}
-                className="sm:hidden transition duration-300 hover:rotate-180"
-            >
-                <img src={assets.menu_icon} className="w-7" />
-            </button>
+            <div className='flex items-center gap-6 sm:hidden'>
+                <div onClick={() => navigate('/cart')} className="relative cursor-pointer group">
+
+                    <div className="absolute inset-0 rounded-full bg-green-400/30 scale-0 group-hover:scale-150 transition duration-500"></div>
+
+                    <img src={assets.nav_cart_icon} className='w-6 opacity-80 relative z-10 transition group-hover:scale-125' />
+
+                    <button className="absolute -top-2 -right-3 text-xs text-white bg-green-600 w-5 h-5 flex items-center justify-center rounded-full">
+                        {getCartCount()}
+                    </button>
+
+                </div>
+                <button
+                    onClick={() => setOpen(!open)}
+                    className=" transition duration-300 hover:rotate-180"
+                >
+                    <img src={assets.menu_icon} className="w-7" />
+                </button>
+            </div>
             <div className={`absolute top-16 left-0 w-full bg-white shadow-lg px-6 flex flex-col gap-4 text-sm overflow-hidden transition-all duration-500 ${open ? "max-h-96 py-4" : "max-h-0"}`}>
 
                 <NavLink to='/' onClick={() => setOpen(false)} className="hover:text-green-500 transition">
