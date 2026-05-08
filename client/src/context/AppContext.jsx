@@ -101,7 +101,6 @@ export const AppContextProvider = ({ children }) => {
     }
     useEffect(() => {
         fetchUser();
-        fetchSeller();
         fetchProducts();
     }, [])
     //update database cart items
@@ -125,7 +124,7 @@ export const AppContextProvider = ({ children }) => {
         user, setUser, setIsSeller,
         isSeller, products, setProducts, currency,
         addToCart, updateCartItem, removeFromCart,
-        cartItems, searchQuery, setSearchQuery, getCartAmount, getCartCount, axios, fetchProducts, setCartItems
+        cartItems, searchQuery, setSearchQuery, getCartAmount, getCartCount, axios, fetchProducts, fetchSeller, setCartItems
     }
     return <AppContext.Provider value={value}>
         {children}
@@ -134,4 +133,3 @@ export const AppContextProvider = ({ children }) => {
 export const useAppContext = () => {
     return useContext(AppContext)
 }
-

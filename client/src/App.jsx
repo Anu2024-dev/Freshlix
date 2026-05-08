@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import { Route, Routes, useLocation } from 'react-router-dom'
@@ -20,7 +20,12 @@ import Orders from './pages/seller/Orders';
 import Loading from './components/Loading';
 const App = () => {
   const isSellerPath = useLocation().pathname.includes('seller');
-  const { showUserLogin, isSeller } = useAppContext();
+  const { showUserLogin, isSeller, fetchSeller } = useAppContext();
+  useEffect(() => {
+    if (isSellerPath) {
+      fetchSeller();
+    }
+  }, [isSellerPath]);
   return (
     <div className='text-default min-h-screen text-gray-700 bg-white'>
       {isSellerPath ? null : <Navbar />}
