@@ -56,7 +56,7 @@ await connectCloudinary();
 // CORS FIX
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://freshlix-y482.vercel.app"],
+    origin: ["http://localhost:5173", "https://freshlix-frontend.vercel.app"],
     credentials: true,
   }),
 );
