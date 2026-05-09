@@ -10,6 +10,7 @@ export const AppContextProvider = ({ children }) => {
     const currency = import.meta.env.VITE_CURRENCY;
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const [isAuthLoading, setIsAuthLoading] = useState(true);
     const [isSeller, setIsSeller] = useState(false);
     const [showUserLogin, setShowUserLogin] = useState(false);
     const [products, setProducts] = useState([]);
@@ -30,15 +31,21 @@ export const AppContextProvider = ({ children }) => {
     }
     //fetch user auth status,user data and cart items
     const fetchUser = async () => {
+        setIsAuthLoading(true);
         try {
             const { data } = await axios.get('/api/user/is-auth')
             if (data.success) {
                 setUser(data.user)
                 setCartItems(data.user.cartItems || {});
+            } else {
+                setUser(null);
+                setCartItems({});
             }
         } catch (error) {
             setUser(null);
             setCartItems({});
+        } finally {
+            setIsAuthLoading(false);
         }
     }
 
@@ -127,6 +134,7 @@ export const AppContextProvider = ({ children }) => {
     }, [cartItems, user])
     const value = {
         showUserLogin, setShowUserLogin, navigate,
+        isAuthLoading,
         user, setUser, setIsSeller,
         isSeller, products, setProducts, currency,
         addToCart, updateCartItem, removeFromCart,
