@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 
 const Login = () => {
 
-    const { setShowUserLogin, setUser, axios, navigate } = useAppContext();
+    const { setShowUserLogin, setUser, setCartItems, setAuthToken, axios } = useAppContext();
 
     const [state, setState] = useState("login");
     const [name, setName] = useState("");
@@ -54,8 +54,9 @@ const Login = () => {
             const { data } = await axios.post(`/api/user/${state}`,
                 { name, email, password })
             if (data.success) {
-                navigate('/')
+                setAuthToken(data.token);
                 setUser(data.user)
+                setCartItems(data.user.cartItems || {});
                 setShowUserLogin(false);
             } else {
                 toast.error(data.message);

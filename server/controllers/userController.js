@@ -5,6 +5,14 @@ import {
   authCookieOptions,
   clearAuthCookieOptions,
 } from "../utils/cookieOptions.js";
+
+const getUserPayload = (user) => ({
+  _id: user._id,
+  email: user.email,
+  name: user.name,
+  cartItems: user.cartItems || {},
+});
+
 //Register User:/api/user/register
 export const register = async (req, res) => {
   try {
@@ -23,7 +31,8 @@ export const register = async (req, res) => {
     res.cookie("token", token, authCookieOptions);
     return res.json({
       success: true,
-      user: { email: user.email, name: user.name },
+      token,
+      user: getUserPayload(user),
     });
   } catch (error) {
     res.json({ success: false, message: error.message });
@@ -55,7 +64,8 @@ export const login = async (req, res) => {
     res.cookie("token", token, authCookieOptions);
     return res.json({
       success: true,
-      user: { email: user.email, name: user.name },
+      token,
+      user: getUserPayload(user),
     });
   } catch (error) {
     console.log(error.message);

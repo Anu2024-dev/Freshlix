@@ -5,6 +5,26 @@ import { useNavigate } from 'react-router-dom';
 import { dummyProducts } from '../assets/assets';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+
+const getStoredToken = () => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('freshlix_token');
+}
+
+const setAuthToken = (token) => {
+    if (typeof window === 'undefined') return;
+
+    if (token) {
+        localStorage.setItem('freshlix_token', token);
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+    } else {
+        localStorage.removeItem('freshlix_token');
+        delete axios.defaults.headers.common.Authorization;
+    }
+}
+
+setAuthToken(getStoredToken());
+
 export const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
     const currency = import.meta.env.VITE_CURRENCY;
@@ -119,8 +139,9 @@ export const AppContextProvider = ({ children }) => {
                 if (!data.success) {
                     toast.error(data.message)
                 }
-            } catch (error) {
+        } catch (error) {
                 if (error.response?.status === 401) {
+                    setAuthToken(null);
                     setUser(null);
                     setCartItems({});
                 } else {
@@ -135,6 +156,7 @@ export const AppContextProvider = ({ children }) => {
     const value = {
         showUserLogin, setShowUserLogin, navigate,
         isAuthLoading,
+        setAuthToken,
         user, setUser, setIsSeller,
         isSeller, products, setProducts, currency,
         addToCart, updateCartItem, removeFromCart,
