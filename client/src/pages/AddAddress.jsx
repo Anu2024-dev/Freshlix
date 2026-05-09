@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { assets } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
@@ -26,7 +26,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 )
 
 const AddAddress = () => {
-    const { axios, user, isAuthLoading, navigate, setShowUserLogin } = useAppContext();
+    const { axios, user, navigate, setShowUserLogin } = useAppContext();
     const [address, setAddress] = useState({
         firstName: '',
         lastName: '',
@@ -49,6 +49,13 @@ const AddAddress = () => {
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
+
+        if (!user) {
+            toast.error("Please login to save your address");
+            setShowUserLogin(true);
+            return;
+        }
+
         try {
             const { data } = await axios.post('/api/address/add', { address });
             if (data.success) {
@@ -67,12 +74,6 @@ const AddAddress = () => {
         }
 
     }
-    useEffect(() => {
-        if (!isAuthLoading && !user) {
-            setShowUserLogin(true);
-            navigate('/cart')
-        }
-    }, [isAuthLoading, user, navigate, setShowUserLogin])
 
     return (
         <div className='mt-16 pb-16 px-4'>
