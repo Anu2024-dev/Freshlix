@@ -34,10 +34,11 @@ export const AppContextProvider = ({ children }) => {
             const { data } = await axios.get('/api/user/is-auth')
             if (data.success) {
                 setUser(data.user)
-                setCartItems(data.user.cartItems);
+                setCartItems(data.user.cartItems || {});
             }
         } catch (error) {
             setUser(null);
+            setCartItems({});
         }
     }
 
@@ -112,13 +113,18 @@ export const AppContextProvider = ({ children }) => {
                     toast.error(data.message)
                 }
             } catch (error) {
-                toast.error(error.message)
+                if (error.response?.status === 401) {
+                    setUser(null);
+                    setCartItems({});
+                } else {
+                    toast.error(error.response?.data?.message || error.message)
+                }
             }
         }
         if (user) {
             updateCart();
         }
-    }, [cartItems])
+    }, [cartItems, user])
     const value = {
         showUserLogin, setShowUserLogin, navigate,
         user, setUser, setIsSeller,

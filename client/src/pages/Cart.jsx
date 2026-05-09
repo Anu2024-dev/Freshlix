@@ -33,7 +33,9 @@ const Cart = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            toast.error(error.message);
+            if (error.response?.status !== 401) {
+                toast.error(error.response?.data?.message || error.message);
+            }
         }
     }
     const placeOrder = async () => {
@@ -68,7 +70,12 @@ const Cart = () => {
                 }
             }
         } catch (error) {
-            toast.error(error.message);
+            if (error.response?.status === 401) {
+                toast.error("Please login to place your order");
+                setShowUserLogin(true);
+            } else {
+                toast.error(error.response?.data?.message || error.message);
+            }
         }
     }
     useEffect(() => {

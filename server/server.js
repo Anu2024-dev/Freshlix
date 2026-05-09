@@ -60,14 +60,22 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
+const isAllowedOrigin = (origin) => {
+  if (!origin || allowedOrigins.includes(origin)) {
+    return true;
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
+  }
+
+  return /^https:\/\/[\w-]+\.vercel\.app$/.test(origin);
+};
+
 app.use(
   cors({
     origin(origin, callback) {
-      if (
-        !origin ||
-        allowedOrigins.includes(origin) ||
-        /^https:\/\/[\w-]+\.vercel\.app$/.test(origin)
-      ) {
+      if (isAllowedOrigin(origin)) {
         return callback(null, true);
       }
 
