@@ -76,7 +76,7 @@ const AddAddress = () => {
     }
 
     return (
-        <div className='mt-16 pb-16 px-4'>
+        <div className='mt-12 sm:mt-16 pb-16 px-1 sm:px-4'>
 
             {/* ✨ Heading Animation */}
             <p className='text-2xl md:text-3xl text-gray-600 font-medium animate-fadeIn'>
@@ -84,14 +84,14 @@ const AddAddress = () => {
                 <span className='font-bold text-green-500 ml-2 animate-pulse'>Address</span>
             </p>
 
-            <div className='flex flex-col-reverse md:flex-row justify-between mt-10 gap-10'>
+            <div className='flex flex-col-reverse md:flex-row justify-between mt-8 sm:mt-10 gap-8 md:gap-10'>
 
                 {/* FORM */}
-                <div className='flex-1 max-w-md bg-white p-6 rounded-xl shadow-lg border border-green-100 hover:shadow-2xl transition-all duration-500 animate-slideUp'>
+                <div className='flex-1 w-full max-w-md bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-green-100 hover:shadow-2xl transition-all duration-500 animate-slideUp'>
 
                     <form onSubmit={onSubmitHandler} className='space-y-4 mt-4 text-sm'>
 
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                             <InputField handleChange={handleChange} address={address} name='firstName' type="text" placeholder="First Name" />
                             <InputField handleChange={handleChange} address={address} name='lastName' type="text" placeholder="Last Name" />
                         </div>
@@ -99,12 +99,12 @@ const AddAddress = () => {
                         <InputField handleChange={handleChange} address={address} name="email" type="email" placeholder="Email Address" />
                         <InputField handleChange={handleChange} address={address} name="street" type="text" placeholder="Street" />
 
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                             <InputField handleChange={handleChange} address={address} name='city' type="text" placeholder="City" />
                             <InputField handleChange={handleChange} address={address} name='state' type='text' placeholder="State" />
                         </div>
 
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                             <InputField handleChange={handleChange} address={address} name='zipcode' type="number" placeholder="Zip Code" />
                             <InputField handleChange={handleChange} address={address} name='country' type='text' placeholder="Country" />
                         </div>
@@ -132,7 +132,7 @@ const AddAddress = () => {
                 {/* IMAGE */}
                 <div className="flex justify-center items-center">
                     <img
-                        className='md:mr-16 mb-10 md:mt-0 w-[300px] md:w-[350px] transition duration-500 hover:scale-110 hover:rotate-1 drop-shadow-xl animate-float'
+                        className='md:mr-16 mb-6 md:mb-10 md:mt-0 w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] transition duration-500 hover:scale-110 hover:rotate-1 drop-shadow-xl animate-float'
                         src={assets.add_address_iamge}
                         alt="Add Address"
                     />

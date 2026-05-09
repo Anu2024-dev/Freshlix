@@ -5,7 +5,7 @@ import { useAppContext } from '../context/AppContext';
 import toast from 'react-hot-toast';
 const Navbar = () => {
     const [open, setOpen] = React.useState(false);
-    const { user, setUser, setCartItems, setAuthToken, showUserLogin, setShowUserLogin, navigate, setSearchQuery, searchQuery, getCartCount, axios } = useAppContext();
+    const { user, setUser, setCartItems, setAuthToken, setShowUserLogin, navigate, setSearchQuery, searchQuery, getCartCount, axios } = useAppContext();
     const logout = async () => {
         try {
             const { data } = await axios.get('/api/user/logout')
@@ -28,7 +28,7 @@ const Navbar = () => {
         }
     }, [searchQuery])
     return (
-        <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-3 border-b border-gray-200 bg-gradient-to-r from-white via-green-50 to-white sticky top-0 z-50 backdrop-blur-md">
+        <nav className="flex items-center justify-between px-3 sm:px-6 md:px-16 lg:px-24 xl:px-32 py-3 border-b border-gray-200 bg-gradient-to-r from-white via-green-50 to-white sticky top-0 z-50 backdrop-blur-md">
             <NavLink to='/' onClick={() => setOpen(false)} className="group flex items-center gap-2">
                 {/* Glow Effect */}
                 <div className="absolute w-20 h-10 bg-green-400/20 blur-xl opacity-0 group-hover:opacity-100 transition duration-500 rounded-full"></div>
@@ -42,7 +42,7 @@ const Navbar = () => {
             </NavLink>
 
             {/* Desktop Menu */}
-            <div className="hidden sm:flex items-center gap-8 text-gray-700 font-medium">
+            <div className="hidden sm:flex items-center gap-4 md:gap-6 lg:gap-8 text-gray-700 font-medium">
                 {[{ name: "Home", path: "/" }, { name: "All Product", path: "/products" }, { name: "Contact", path: "/contacts" }].map((item, i) => (
                     <NavLink
                         key={i}
@@ -104,7 +104,7 @@ const Navbar = () => {
                     </div>
                 )}
             </div>
-            <div className='flex items-center gap-6 sm:hidden'>
+            <div className='flex items-center gap-5 sm:hidden'>
                 <div onClick={() => navigate('/cart')} className="relative cursor-pointer group">
 
                     <div className="absolute inset-0 rounded-full bg-green-400/30 scale-0 group-hover:scale-150 transition duration-500"></div>
@@ -134,9 +134,8 @@ const Navbar = () => {
                 </NavLink>
 
                 {user && (
-                    <NavLink to='/products' onClick={() => {
+                    <NavLink to='/my-orders' onClick={() => {
                         setOpen(false);
-                        setShowUserLogin(true);
                     }} className="hover:text-green-500 transition">
                         My Orders
                     </NavLink>

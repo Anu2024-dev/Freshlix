@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { dummyProducts } from '../assets/assets';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -25,6 +25,20 @@ const setAuthToken = (token) => {
 
 setAuthToken(getStoredToken());
 
+const getStoredCart = () => {
+    if (typeof window === 'undefined') return {};
+    try {
+        return JSON.parse(localStorage.getItem('freshlix_cart') || '{}');
+    } catch {
+        return {};
+    }
+}
+
+const setStoredCart = (cartItems) => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem('freshlix_cart', JSON.stringify(cartItems || {}));
+}
+
 export const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
     const currency = import.meta.env.VITE_CURRENCY;
@@ -34,8 +48,9 @@ export const AppContextProvider = ({ children }) => {
     const [isSeller, setIsSeller] = useState(false);
     const [showUserLogin, setShowUserLogin] = useState(false);
     const [products, setProducts] = useState([]);
-    const [cartItems, setCartItems] = useState({});
-    const [searchQuery, setSearchQuery] = useState({});
+    const [cartItems, setCartItems] = useState(getStoredCart);
+    const [searchQuery, setSearchQuery] = useState('');
+    const hasHydratedCart = useRef(false);
     //fetch seller status
     const fetchSeller = async () => {
         try {
@@ -45,7 +60,7 @@ export const AppContextProvider = ({ children }) => {
             } else {
                 setIsSeller(false);
             }
-        } catch (error) {
+        } catch {
             setIsSeller(false);
         }
     }
@@ -59,12 +74,13 @@ export const AppContextProvider = ({ children }) => {
                 setCartItems(data.user.cartItems || {});
             } else {
                 setUser(null);
-                setCartItems({});
+                setCartItems(getStoredCart());
             }
-        } catch (error) {
+        } catch {
             setUser(null);
-            setCartItems({});
+            setCartItems(getStoredCart());
         } finally {
+            hasHydratedCart.current = true;
             setIsAuthLoading(false);
         }
     }
@@ -121,7 +137,7 @@ export const AppContextProvider = ({ children }) => {
         let totalAmount = 0;
         for (const items in cartItems) {
             let itemInfo = products.find((product) => product._id === items);
-            if (cartItems[items] > 0) {
+            if (itemInfo && cartItems[items] > 0) {
                 totalAmount += itemInfo.offerPrice * cartItems[items];
             }
         }
@@ -149,7 +165,8 @@ export const AppContextProvider = ({ children }) => {
                 }
             }
         }
-        if (user) {
+        setStoredCart(cartItems);
+        if (user && hasHydratedCart.current) {
             updateCart();
         }
     }, [cartItems, user])

@@ -7,8 +7,8 @@ const ProductCard = ({ product }) => {
     const { currency, addToCart, removeFromCart, cartItems, navigate } = useAppContext();
 
     return product && (
-        <div onClick={() => { navigate(`/products/${product.category.toLowerCase()}/${product._id}`); scrollTo(0, 0) }} className="group border border-gray-200 rounded-xl md:px-4 px-3 py-3 bg-white 
-        min-w-56 max-w-56 w-full 
+        <div onClick={() => { navigate(`/products/${product.category.toLowerCase()}/${product._id}`); scrollTo(0, 0) }} className="group border border-gray-200 rounded-xl px-2.5 sm:px-3 md:px-4 py-3 bg-white 
+        min-w-0 w-full h-full
         transition-all duration-300 ease-in-out
         hover:shadow-xl hover:-translate-y-2 hover:border-green-300">
 
@@ -51,9 +51,9 @@ const ProductCard = ({ product }) => {
                 {/* Price + Cart */}
                 <div className="flex items-end justify-between mt-3">
 
-                    <p className="text-lg font-semibold text-green-600">
+                    <p className="text-base sm:text-lg font-semibold text-green-600 min-w-0">
                         {currency}{product.offerPrice}{" "}
-                        <span className="text-gray-400 text-xs line-through">
+                        <span className="block sm:inline text-gray-400 text-xs line-through">
                             {currency}{product.price}
                         </span>
                     </p>
@@ -66,7 +66,7 @@ const ProductCard = ({ product }) => {
                                 onClick={() => addToCart(product._id)}
                                 className="relative flex items-center justify-center gap-1 
                                 bg-gradient-to-r from-green-500 to-emerald-500 
-                                text-white px-3 py-1.5 rounded-full text-sm
+                                text-white px-2 sm:px-3 py-1.5 rounded-full text-xs sm:text-sm
                                 hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden"
                             >
 
@@ -81,7 +81,7 @@ const ProductCard = ({ product }) => {
 
                         ) : (
 
-                            <div className="flex items-center gap-2 bg-green-100 px-2 py-1 rounded-full">
+                            <div className="flex items-center gap-1 sm:gap-2 bg-green-100 px-1.5 sm:px-2 py-1 rounded-full">
 
                                 <button
                                     onClick={() => removeFromCart(product._id)}

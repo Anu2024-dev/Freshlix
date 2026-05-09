@@ -77,7 +77,7 @@ export const placeOrderStripe = async (req, res) => {
     const session = await stripeInstance.checkout.sessions.create({
       line_items,
       mode: "payment",
-      success_url: `${origin}/loader?next=my-orders`,
+      success_url: `${origin}/loader?next=my-orders&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/cart`,
       metadata: {
         orderId: order._id.toString(),
@@ -85,6 +85,35 @@ export const placeOrderStripe = async (req, res) => {
       },
     });
     return res.json({ success: true, url: session.url });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+//verify Stripe checkout after redirect:/api/order/verify-stripe
+export const verifyStripePayment = async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    const userId = req.user?.userId || req.body.userId;
+
+    if (!sessionId) {
+      return res.json({ success: false, message: "Missing Stripe session" });
+    }
+
+    const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
+    const session = await stripeInstance.checkout.sessions.retrieve(sessionId);
+    const orderId = session.metadata?.orderId;
+
+    if (!orderId || session.metadata?.userId !== userId) {
+      return res.status(403).json({ success: false, message: "Invalid payment session" });
+    }
+
+    if (session.payment_status === "paid") {
+      await Order.findByIdAndUpdate(orderId, { isPaid: true });
+      await User.findByIdAndUpdate(userId, { cartItems: {} });
+      return res.json({ success: true, message: "Payment verified" });
+    }
+
+    return res.json({ success: false, message: "Payment is not completed yet" });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
